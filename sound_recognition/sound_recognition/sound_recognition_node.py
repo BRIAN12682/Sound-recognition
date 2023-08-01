@@ -33,12 +33,7 @@ class SoundRecongnitionNode(Node):
 
         # started_param_name = "started"
         self.started = True
-        # self.declare_parameter(started_param_name, True)
-
-        # self.started = self.get_parameter(
-        # started_param_name).get_parameter_value().bool_value
-
-        # ring publisher
+        
         self.__pub = self.create_publisher(String, "sound_recognition", 10)
 
         # service servers
@@ -124,13 +119,13 @@ class SoundRecongnitionNode(Node):
             self.started = not self.started
             self._start_ad()
         else:
-            self.get_logger().info("stt is already running")
+            self.get_logger().info("Program already running")
 
     def _start_ad(self):
         """ start listen with a thread"""
 
         while(self.__listen_thread is not None and self.__listen_thread.is_alive()):
-            time.sleep(0.01)
+            time.sleep(0.10)
 
         self.__listen_thread = CustomThread(
             target=self.__listen_thread_cb)
@@ -140,15 +135,7 @@ class SoundRecongnitionNode(Node):
     def __stop_ad_srv(self,
                       req: Empty.Request,
                       res: Empty.Response) -> Empty.Response:
-        """ service to stop listen
-
-        Args:
-            req(Empty.Request): empty
-            res(Empty.Response): empty
-
-        Returns:
-            Empty.Response: empty
-        """
+        
 
         self.stop_ad()
         return res
